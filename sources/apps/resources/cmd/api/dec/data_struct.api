@@ -1,0 +1,281 @@
+syntax = "v1"
+
+info(
+    title: "资源实体信息"
+    desc: "资源数据相关结构体"
+    author: "baiyz0825"
+    email: "byz0825@outlook.com"
+    version: "v0.1"
+)
+
+// 通用vo
+type (
+    File {
+        //文件自增id
+        ID int64 `json:"id"`
+        //文件uuid唯一标识
+        UUID int64 `json:"uuid"`
+        //文件名称
+        name string `json:"name"`
+        //文件混淆名称
+        obfuscateName string `json:"obfuscateName"`
+        //文件占用空间大小（kb）
+        size int64 `json:"size"`
+        //对应用户id
+        owner int64 `json:"owner"`
+        //0:已删除（云端） 1:（本地存储状态） 2:（云端存储状态，末态） 3:(用户隐藏状态）
+        status int64 `json:"status"`
+        //文件所属类型 文本0、文件1、视频2、图片3
+        fileType int64 `json:"fileType"`
+        //文件所属分类
+        class int64 `json:"class"`
+        //文件后缀信息
+        suffix string `json:"suffix"`
+        //是否允许查看 0 no 1 yes
+        downloadAllow int64 `json:"downloadAllow"`
+        //文件云端存储目录
+        link string `json:"link"`
+        // 文件头图
+        filePoster string `json:"filePoster"`
+        //创建时间
+        createTime int64 `json:"createTime"`
+        //更新时间
+        updateTime int64 `json:"updateTime"`
+    }
+    OnlineText {
+        //在线文本自增id
+        ID int64 `json:"id"`
+        //文本uuid
+        UUID int64 `json:"uuid"`
+        //文本输入格式（0 markdown）
+        typeSuffix int64 `json:"typeSuffix"`
+        //所属用户
+        owner int64 `json:"owner"`
+        //存储实际内容
+        content string `json:"content"`
+        //所属资源分类id
+        classID int64 `json:"classId"`
+        //是否允许查看 0 no 1 yes
+        permission int64 `json:"permission"`
+        // 文本资源标题
+        textName string `json:"textName"`
+        // 文本头图
+        textPoster string `json:"textPoster"`
+        //创建时间
+        createTime int64 `json:"createTime"`
+        //更新时间
+        updateTime int64 `json:"updateTime"`
+    }
+    Count {
+        //用户id
+        uID int64 `json:"uId"`
+        //用户存储文件数量
+        fileNum int64 `json:"fileNum"`
+        //用户存储视频数量
+        videoNum int64 `json:"videoNum"`
+        //用户存储图片数量
+        picNum int64 `json:"picNum"`
+        //用户存储空间占用（mb）不足mb按mb计算
+        storageSize int64 `json:"storageSize"`
+        //创建时间
+        createTime int64 `json:"createTime"`
+        //更新时间
+        updateTime int64 `json:"updateTime"`
+    }
+
+    ResComment {
+        //评论自增id
+        ID int64 `json:"id"`
+        //评论所属人信息
+        owner int64 `json:"owner"`
+        //资源id
+        resourceID int64 `json:"resourceId"`
+        //评论内容
+        content string `json:"content"`
+        //创建时间
+        createTime int64 `json:"createTime"`
+        //更新时间
+        updateTime int64 `json:"updateTime"`
+    }
+)
+
+//分类
+type (
+    // 分类树形菜单实体
+    MenuItem {
+        //资源id
+        classID int64 `json:"classId"`
+        //父分类ID
+        classParentID int64 `json:"classParentId"`
+        //分类名称
+        className string `json:"className"`
+        //分类下资源数量
+        classResourceNum int64 `json:"classResourceNum"`
+        // 子分类数据
+        children []MenuItem `json:"children"`
+    }
+    ClassificationTreeMenuResp {
+        Classifications []MenuItem `json:"classifications"`
+    }
+        // 获取分类下资源分页面
+    SearchClassificationSubDataReq {
+        classificationID int64 `json:"classificationID,optional" validate:"gte=0"`
+        // 是否用户查询自己的
+        isUser bool `json:"isUser"`
+        keyWord string `json:"keyWord,optional"`
+        resType int64 `json:"resType,optional" validate:"gte=0"`
+        page int64 `json:"page" validate:"required,gt=0"`
+        limit int64 `json:"limit" validate:"required,gt=0"`
+    }
+    SearchClassificationSubDataResp {
+        files []File `json:"files"`
+        filesTotal int64 `json:"filesTotal"`
+        onlineText []OnlineText `json:"onlineText"`
+        textsTotal int64 `json:"textsTotal"`
+    }
+)
+
+
+// 用户数据统计
+type (
+    GetCountUiDResp {
+        userFileCount Count `json:"userFileCount"`
+    }
+)
+
+// 文件资源
+type (
+    UploadFileReq {
+        //文件名称
+        name string `form:"name" validate:"required"`
+        //0:已删除（云端） 1:（本地存储状态） 2:（云端存储状态，末态） 3:(用户隐藏状态）
+        //文件所属类型 文本0、文件1、视频2、图片3
+        //文件所属分类
+        class int64 `form:"class" validate:"required" validate:"required,gt=0"`
+        //文件后缀信息
+        //是否允许查看 0 no 1 yes
+        downloadAllow int64 `form:"downloadAllow" validate:"required" validate:"required,gte=0,lte=1"`
+        //文件云端存储目录
+    }
+        // 删除文件请求
+    DelFileReq {
+        // 文件id
+        id int64 `form:"id" validate:"required,gt=0"`
+    }
+
+        // 文件资料搜索
+    SearchFileConditionReq {
+        //page
+        page int64 `json:"page" validate:"required,gt=0"`
+        //limit
+        limit int64 `json:"limit" validate:"required,gt=0"`
+        //文件名称
+        name string `json:"name"`
+        //对应用户id
+        owner int64 `json:"owner" validate:"gt=0"`
+        //0:已删除（云端） 1:（本地存储状态） 2:（云端存储状态，末态） 3:(用户隐藏状态）
+        //        status int64 `json:"status" validate:"gte=0,lte=2"`
+        //文件所属类型 文本0、文件1、视频2、图片3
+        fileType int64 `json:"fileType" validate:"gte=0,lte=3"`
+        //文件所属分类
+        class int64 `json:"class"`
+        //文件后缀信息
+        //        suffix string `json:"suffix"`
+    }
+    SearchFileConditionResp {
+        // 文件详情
+        files []File `json:"files"`
+    }
+        // 下载文件资源请求
+    DownLoadFileReq {
+        resourceFileId int64 `form:"resourceFileId" validate:"required,gte=0"`
+    }
+        // 查询文件资源详细信息
+    FileResInfoReq {
+        fileResId int64 `form:"fileResId" validate:"required,gte=0"`
+    }
+    FileResInfoResp {
+        file File `json:"file"`
+    }
+)
+
+
+// 文本资源
+type (
+    UploadTextReq {
+        // TODO 文本输入格式（0 markdown）需要增加格式，修改校验规则 validate:"gte=0"
+        typeSuffix int64 `form:"typeSuffix" validate:"gte=0"`
+        //存储实际内容'
+        content string `form:"content" validate:"required"`
+        //所属资源分类id
+        classID int64 `form:"classId" validate:"required,gte=0"`
+        //是否允许查看 0 no 1 yes
+        permission int64 `form:"permission" validate:"gte=0,lte=1"`
+        // 文本资源标题
+        textName string `form:"textName" validate:"required"`
+    }
+        // 删除文件请求
+    DelTextReq {
+        // 文本id
+        id int64 `form:"id" validate:"required"`
+    }
+        // 文本资料搜索
+    SearchOnlineConditionTextReq {
+        //page
+        page int64 `json:"page" validate:"required,gt=0"`
+        //limit
+        limit int64 `json:"limit" validate:"required,gt=0"`
+        //所属用户
+        owner int64 `json:"owner,optional" validate:"omitempty,gt=0"`
+        //所属资源分类id
+        classID int64 `json:"classId,optional" validate:"omitempty,gt=0"`
+        //是否允许查看 0 no 1 yes
+        permission int64 `json:"permission" validate:"gte=0,lte=1"`
+    }
+    SearchOnlineTextConditionResp {
+        onlineText []OnlineText `json:"onlineText"`
+    }
+        // 获取onlineText资源详情
+    TextResInfoReq {
+        textResId int64 `form:"textResId" validate:"required,gte=0"`
+    }
+    TextResInfoResp {
+        onlineText OnlineText `json:"onlineText"`
+    }
+)
+
+
+// 评论
+type (
+    // 增加评论
+    AddResCommentReq {
+        resourceID int64 `json:"resourceId" validate:"required,gt=0"`
+        content string `json:"content" validate:"required"`
+    }
+        // 删除评论
+    DelCommentReq {
+        ID int64 `form:"id" validate:"required,gt=0"`
+    }
+        // 查询评论详情
+    GetCommentByIdReq {
+        ID int64 `form:"id" validate:"required,gt=0"`
+    }
+    GetCommentByIdResp {
+        comment ResComment `json:"comment"`
+    }
+        // 查询某个资源下评论信息 | 查询用户所有评论 | 查询用户在某一个资源下的所有评论
+    ResCommentByUserOrResIdReq {
+        //page
+        page int64 `json:"page" validate:"required,gt=0"`
+        //limit
+        limit int64 `json:"limit" validate:"required,gt=0"`
+        //资源id
+        resourceID int64 `json:"resourceId" validate:"required,gt=0"`
+    }
+    ResCommentByUserOrResIdResp {
+        comments []ResComment `json:"comments"`
+    }
+)
+
+
+

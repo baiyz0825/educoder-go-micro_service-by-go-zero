@@ -1,0 +1,63 @@
+syntax = "v1"
+
+info(
+	title: "用户中心"
+	desc: "包含用户基本数据和基本接口定义"
+	author: "baiyz0825"
+	email: "byz0825@outlook.com"
+	version: "v0.1"
+)
+
+import (
+	"data_struct.api"
+)
+
+// ===============================================================> 用户中心（免认证）<========================================================================
+@server(
+	group: user
+	prefix: user/v1
+)
+service user {
+	@doc "用户注册接口"
+	@handler register
+	post /register (RegisterReq) returns (RegisterResp)
+	
+	@doc "用户登陆接口"
+	@handler login
+	post /login (LoginReq) returns (LoginResp)
+	
+	@doc "验证码接口"
+	@handler captcha
+	get /captcha returns (ChaptchaResp)
+}
+
+// ===============================================================> 用户中心（认证）<========================================================================
+@server (
+	jwt: Auth
+	group: user
+	prefix : user/v1
+)
+service user{
+	@doc "查询用户详细信息（个人中心）"
+	@handler userInfo
+	get /info returns (UserInfoResp)
+	
+	@doc "修改个人用户信息（个人中心）"
+	@handler modInfo
+	post /modInfo (UserDataReq)
+	
+	@doc "上传用户头像"
+	@handler uploadUserAvatar
+	post /upload
+}
+
+@server (
+	jwt: Auth
+	group: major
+	prefix : user/v1
+)
+service user{
+	@doc "获取全部用户主修"
+	@handler getAllMajors
+	get /major  returns (getAllMajorsResp)
+}

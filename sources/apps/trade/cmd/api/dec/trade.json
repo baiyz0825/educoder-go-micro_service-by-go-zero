@@ -1,0 +1,348 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "商品中心API",
+    "description": "商品信息查询获取接口",
+    "version": "v0.1"
+  },
+  "host": "127.0.0.1:8002",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "trade/v1/product/addone": {
+      "post": {
+        "summary": "增加一个商品",
+        "operationId": "addProduct",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/addProductReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "product"
+        ]
+      }
+    },
+    "trade/v1/product/delone": {
+      "delete": {
+        "summary": "删除一个商品",
+        "operationId": "delOneProduct",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/delOneReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "product"
+        ]
+      }
+    },
+    "trade/v1/product/oneinfo": {
+      "get": {
+        "summary": "查询商品信息",
+        "operationId": "getProductInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetProductInfoResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "required",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "product"
+        ]
+      }
+    },
+    "trade/v1/product/search": {
+      "post": {
+        "summary": "条件查询所有商品信息",
+        "operationId": "getProductInfoQuery",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/searchProductByConditionResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/searchProductByConditionReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "product"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "GetProductInfoReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "uuid": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetProductInfoReq",
+      "required": [
+        "id",
+        "uuid",
+        "required"
+      ]
+    },
+    "GetProductInfoResp": {
+      "type": "object",
+      "properties": {
+        "product": {
+          "$ref": "#/definitions/Product"
+        }
+      },
+      "title": "GetProductInfoResp",
+      "required": [
+        "product"
+      ]
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "uuid": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "fileType": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "priductBind": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "owner": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
+        },
+        "saled": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createTime": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "updateTime": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "Product",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "fileType",
+        "priductBind",
+        "owner",
+        "price",
+        "saled",
+        "createTime",
+        "updateTime"
+      ]
+    },
+    "addProductReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "productType": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "owner": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "priductBind": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "title": "addProductReq",
+      "required": [
+        "name",
+        "productType",
+        "owner",
+        "required",
+        "priductBind",
+        "price"
+      ]
+    },
+    "delOneReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "uuid": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "delOneReq",
+      "required": [
+        "id",
+        "required",
+        "uuid"
+      ]
+    },
+    "searchProductByConditionReq": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "productType": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "bottonPrice": {
+          "type": "number",
+          "format": "double"
+        },
+        "topPrice": {
+          "type": "number",
+          "format": "double"
+        },
+        "desc": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      },
+      "title": "searchProductByConditionReq",
+      "required": [
+        "page",
+        "required",
+        "limit",
+        "productType",
+        "name",
+        "bottonPrice",
+        "topPrice",
+        "desc"
+      ]
+    },
+    "searchProductByConditionResp": {
+      "type": "object",
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Product"
+          }
+        }
+      },
+      "title": "searchProductByConditionResp",
+      "required": [
+        "products"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}

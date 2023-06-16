@@ -1,0 +1,226 @@
+version: '3.5'
+# 网络配置
+networks:
+  dev-go-zero:
+    driver: bridge
+# 依赖服务
+services:
+  etcd:                                  # 自定义容器名称
+    build:
+      context: etcd                    # 指定构建使用的 Dockerfile 文件
+    environment:
+      - TZ=Asia/Shanghai
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    ports:                               # 设置端口映射
+      - "2379:2379"
+    networks:
+      - dev-go-zero
+    restart: always
+  etcd-manage:
+    build:
+      context: etcd-manage
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "7000:8080"                    # 设置容器8080端口映射指定宿主机端口，用于宿主机访问可视化web
+    depends_on:                                       # 依赖容器
+      - etcd                                          # 在 etcd 服务容器启动后启动
+    networks:
+      - dev-go-zero
+    restart: always
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+    ports:
+      - "3306:3306"
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+# 业务容器
+  order-rpc:
+    build:
+      context: courseware                 # 指定构建使用的 Dockerfile 文件
+      dockerfile: order/cmd/rpc/Dockerfile
+    depends_on:
+      - etcd
+      - mysql
+      - redis
+      - trade-rpc
+    environment:
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports:
+      - "8010:8010"
+    networks:
+      - dev-go-zero
+    restart: always
+
+  resources-rpc:
+    build:
+      context: courseware                 # 指定构建使用的 Dockerfile 文件
+      dockerfile: resources/cmd/rpc/Dockerfile
+    depends_on:
+      - etcd
+      - mysql
+      - redis
+    environment:
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports:
+      - "8011:8011"
+    networks:
+      - dev-go-zero
+    restart: always
+
+  trade-rpc:
+    build:
+      context: courseware                 # 指定构建使用的 Dockerfile 文件
+      dockerfile: trade/cmd/rpc/Dockerfile
+    depends_on:
+      - etcd
+      - mysql
+      - redis
+    environment:
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports:
+      - "8012:8012"
+    networks:
+      - dev-go-zero
+    restart: always
+
+  user-rpc:
+    build:
+      context: courseware                 # 指定构建使用的 Dockerfile 文件
+      dockerfile: user/cmd/rpc/Dockerfile
+    depends_on:
+      - etcd
+      - mysql
+      - redis
+    environment:
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports:
+      - "8013:8013"
+    networks:
+      - dev-go-zero
+    restart: always
+
+  scheduler:
+    build:
+      context: courseware                 # 指定构建使用的 Dockerfile 文件
+      dockerfile: mq/cmd/scheduler/Dockerfile
+    depends_on:
+      - etcd
+      - mysql
+      - redis
+    environment:
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports:
+      - "8014:8014"
+    networks:
+      - dev-go-zero
+    restart: always
+
+  job:
+    build:
+      context: courseware                 # 指定构建使用的 Dockerfile 文件
+      dockerfile: mq/cmd/job/Dockerfile
+    depends_on:
+      - etcd
+      - mysql
+      - redis
+      - order-rpc
+      - resources-rpc
+      - trade-rpc
+    environment:
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports:
+      - "8015:8015"
+    networks:
+      - dev-go-zero
+    restart: always
+
+  order-api:
+    build:
+      context: courseware                 # 指定构建使用的 Dockerfile 文件
+      dockerfile: order/cmd/api/Dockerfile
+    depends_on:
+      - etcd
+      - mysql
+      - redis
+      - order-rpc
+      - resources-rpc
+      - trade-rpc
+      - user-rpc
+    environment:
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports:
+      - "8000:8000"
+    networks:
+      - dev-go-zero
+    restart: always
+
+  resources-api:
+    build:
+      context: courseware                 # 指定构建使用的 Dockerfile 文件
+      dockerfile: resources/cmd/api/Dockerfile
+    depends_on:
+      - etcd
+      - mysql
+      - redis
+      - resources-rpc
+      - trade-rpc
+      - order-rpc
+    environment:
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports:
+      - "8001:8001"
+    networks:
+      - dev-go-zero
+    restart: always
+
+  trade-api:
+    build:
+      context: courseware                 # 指定构建使用的 Dockerfile 文件
+      dockerfile: trade/cmd/api/Dockerfile
+    depends_on:
+      - etcd
+      - mysql
+      - redis
+      - trade-rpc
+      - resources-rpc
+    environment:
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports:
+      - "8002:8002"
+    networks:
+      - dev-go-zero
+    restart: always
+
+  user-api:
+    build:
+      context: courseware                 # 指定构建使用的 Dockerfile 文件
+      dockerfile: user/cmd/api/Dockerfile
+    depends_on:
+      - etcd
+      - mysql
+      - redis
+      - user-rpc
+    environment:
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports:
+      - "8003:8003"
+    networks:
+      - dev-go-zero
+    restart: always
+

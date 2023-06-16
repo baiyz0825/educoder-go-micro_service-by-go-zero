@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "./pb";
+
+package pb;
+
+message UserReq {
+  string UserName = 1;
+  int64 int64 = 2;
+}
+
+message UserResp {
+  string UserHome = 1;
+  repeated int64 UserMoneyCardNum = 2;
+}
+
+service OrderService {
+  rpc GetUserInfo(UserReq) returns (UserResp);
+}

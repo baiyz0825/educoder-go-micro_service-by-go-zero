@@ -1,0 +1,402 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "用户中心",
+    "description": "包含用户基本数据和基本接口定义",
+    "version": "v0.1"
+  },
+  "host": "127.0.0.1:8003",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "user/v1/captcha": {
+      "get": {
+        "summary": "验证码接口",
+        "operationId": "captcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ChaptchaResp"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "user/v1/info": {
+      "get": {
+        "summary": "查询用户详细信息（个人中心）",
+        "operationId": "userInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UserInfoResp"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "user/v1/login": {
+      "post": {
+        "summary": "用户登陆接口",
+        "operationId": "login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/LoginResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " 用户登陆请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "user/v1/modInfo": {
+      "post": {
+        "summary": "修改个人用户信息（个人中心）",
+        "operationId": "modInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserDataReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "user/v1/register": {
+      "post": {
+        "summary": "用户注册接口",
+        "operationId": "register",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/RegisterResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " 注册请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "user"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "ChaptchaResp": {
+      "type": "object",
+      "properties": {
+        "captchaB64": {
+          "type": "string"
+        },
+        "captchaId": {
+          "type": "string"
+        }
+      },
+      "title": "ChaptchaResp",
+      "required": [
+        "captchaB64",
+        "captchaId"
+      ]
+    },
+    "LoginReq": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "captcha": {
+          "type": "string"
+        },
+        "captchaId": {
+          "type": "string"
+        }
+      },
+      "title": "LoginReq",
+      "required": [
+        "phone",
+        "required",
+        "email",
+        "password",
+        "captcha",
+        "captchaId"
+      ]
+    },
+    "LoginResp": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "expireTime": {
+          "type": "string"
+        }
+      },
+      "title": "LoginResp",
+      "required": [
+        "accessToken",
+        "expireTime"
+      ]
+    },
+    "RegisterReq": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "captcha": {
+          "type": "string"
+        },
+        "captchaId": {
+          "type": "string"
+        }
+      },
+      "title": "RegisterReq",
+      "required": [
+        "username",
+        "password",
+        "required",
+        "phone",
+        "captcha",
+        "captchaId"
+      ]
+    },
+    "RegisterResp": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        },
+        "expireTime": {
+          "type": "string"
+        }
+      },
+      "title": "RegisterResp",
+      "required": [
+        "accessToken",
+        "refreshToken",
+        "expireTime"
+      ]
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userUniqueId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "gender": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "grade": {
+          "type": "string"
+        },
+        "major": {
+          "type": "string"
+        },
+        "star": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "sign": {
+          "type": "string"
+        },
+        "class": {
+          "type": "string"
+        },
+        "socialBind": {
+          "type": "object"
+        }
+      },
+      "title": "User",
+      "required": [
+        "userId",
+        "userUniqueId",
+        "userName",
+        "age",
+        "gender",
+        "phone",
+        "email",
+        "grade",
+        "major",
+        "star",
+        "avatar",
+        "sign",
+        "class",
+        "socialBind"
+      ]
+    },
+    "UserDataReq": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "passsword": {
+          "type": "string"
+        },
+        "sign": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "gender": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "major": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "grade": {
+          "type": "string"
+        },
+        "class": {
+          "type": "string"
+        }
+      },
+      "title": "UserDataReq",
+      "required": [
+        "username",
+        "passsword",
+        "required",
+        "sign",
+        "avatar",
+        "phone",
+        "email",
+        "age",
+        "gte=0",
+        "gender",
+        "major",
+        "grade",
+        "class"
+      ]
+    },
+    "UserInfoResp": {
+      "type": "object",
+      "properties": {
+        "userInfo": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "title": "UserInfoResp",
+      "required": [
+        "userInfo"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}

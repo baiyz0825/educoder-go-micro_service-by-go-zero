@@ -1,0 +1,38 @@
+syntax = "v1"
+
+info(
+	title: "商品中心API"
+	desc: "商品信息查询获取接口"
+	author: "baiyz0825"
+	email: "byz0825@outlook.com"
+	version: "v0.1"
+)
+
+import (
+	"data_struct.api"
+)
+
+@server(
+	jwt: Auth
+	group: product
+	prefix : trade/v1
+)
+
+// ===============================================================> 商品 <========================================================================
+service trade {
+	@doc "条件查询所有商品信息"
+	@handler getProductInfoQuery
+	post /product/search (searchProductByConditionReq) returns (searchProductByConditionResp)
+	
+	@doc "查询商品信息"
+	@handler getProductInfo
+	get /product/oneinfo (GetProductInfoReq) returns (GetProductInfoResp)
+	
+	@doc "增加一个商品"
+	@handler addProduct
+	post /product/addone (addProductReq)
+	
+	@doc "删除一个商品"
+	@handler delOneProduct
+	delete /product/delone (delOneReq)
+}

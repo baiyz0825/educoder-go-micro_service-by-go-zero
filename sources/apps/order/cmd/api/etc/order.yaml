@@ -1,0 +1,41 @@
+Name: api.order
+Host: 0.0.0.0
+Port: 8000
+OrderRpcConfig:
+  Endpoints:
+    - 0.0.0.0:8010
+ResourcesRpcConfig:
+  EndPoints:
+    - 0.0.0.0:8011
+UserRpcConfig:
+  Endpoints:
+    - 0.0.0.0:8013
+TradeRpcConfig:
+  Endpoints:
+    - 0.0.0.0:8012
+Auth:
+  AccessSecret: abcd1234
+  AccessExpire: 1200
+Log:
+  ServiceName: api.order
+  Mode: console
+  Encoding: plain
+  Path: logs
+  TimeFormat: 2006-01-02T15:04:05.000Z07:00
+  Level: debug
+  KeepDays: 2
+  StackCooldownMillis: 100
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+  Tls: false
+AliPay:
+  AppId: "2021000122683492"
+  IsProduction: false
+  PayCallBackUrl:
+  NoticeUrl:
+  AppPublicCertPath: etc/cert/appPublicCert.crt
+  ALiPayRootCertPath: etc/cert/alipayRootCert.crt
+  ALiPayPublicCertPath: etc/cert/alipayPublicCert.crt
+  AppPrivateKeyPath: etc/cert/appPrivateKey.txt
+  ContentAesKey: yzS0whYsNGtfLEDZKBOl0Q==

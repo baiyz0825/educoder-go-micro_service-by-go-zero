@@ -1,0 +1,83 @@
+syntax = "v1"
+
+info(
+    title: "订单中心结构体"
+    desc: "订单相关结构体数据定义"
+    author: "baiyz0825"
+    email: "byz0825@outlook.com"
+    version: "v0.1"
+)
+// 公有对象
+type (
+    ProductBaseInfo {
+        ID int64 `json:"id"`
+        name string `json:"name"`
+        productOwnerName string `json:"productOwnerName"`
+        productOwnerId int64 `json:"productOwnerId"`
+    }
+)//
+
+// 获取订单详情
+type (
+    OrderInfoReq {
+        uuid int64 `form:"uuid" validate:"required,gt=0"`
+        userId int64 `form:"userId" validate:"required,gt=0"`
+    }
+    OrderInfoResp {
+        id int64 `json:"id"`
+        uuid int64 `json:"uuid"`
+        product ProductBaseInfo `json:"product"`
+        status int64 `json:"status"`
+        // 下单用户id
+        userId int64 `json:"userId"`
+        payPrice float64 `json:"payPrice"`
+        payPath int64 `json:"payPath"`
+        createTime int64 `json:"createTime"`
+        statusUpdateTime int64 `json:"statusUpdateTime"`
+    }
+)
+// 下单
+type (
+    DoOrderReq {
+        productId int64 `json:"productId" validate:"required,gt=0"`
+        // 下单用户id
+        payPath int64 `json:"payPath" validate:"required"`
+    }
+    DoOrderResp {
+        payPathOrderNum string `json:"payPathOrderNum"`
+        status int64 `json:"status"`
+        payUrl string `json:"payUrl"`
+    }
+)
+
+
+// 查询获取用户所有订单信息
+type (
+    GetUserAllOrder {
+        isDescByTime int64 `form:"isDescByTime,optional"`
+        // 订单完成状态 0 是默认，查询全部 0,1,2
+        status int64 `form:"status,optional"  validate:"omitempty,gte=0,lte=2"`
+        // 分页
+        page int64 `form:"page" validate:"required,gt=0"`
+        limit int64 `form:"limit" validate:"required,gt=0"`
+        // 支付渠道 默认支付宝1  wchat 0
+        payPath int64 `form:"payPath,optional" validate:"required,gte=0,lte=1"`
+    }
+    GetUserAllOrderResp {
+        orders []OrderInfo `json:"orderInfo"`
+        total int64 `json:"total"`
+    }
+    OrderInfo {
+        id int64 `json:"id"`
+        uuid int64 `json:"uuid"`
+        product ProductBaseInfo `json:"product"`
+        status int64 `json:"status"`
+        // 下单用户id
+        userId int64 `json:"userId"`
+        payPrice float64 `json:"payPrice"`
+        payPath int64 `json:"payPath"`
+        payCodeUrl int64 `json:"payCodeUrl"`
+        createTime int64 `json:"createTime"`
+        statusUpdateTime int64 `json:"statusUpdateTime"`
+    }
+)

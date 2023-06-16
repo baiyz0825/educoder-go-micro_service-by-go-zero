@@ -1,0 +1,17 @@
+Name: resourcesrpc
+ListenOn: 0.0.0.0:8011
+Mode: dev
+Log:
+  ServiceName: resourcesrpc
+  Mode: console
+  Encoding: plain
+  Path: logs
+  TimeFormat: 2006-01-02T15:04:05.000Z07:00
+  Level: debug
+  KeepDays: 2
+  StackCooldownMillis: 100
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+  Tls: false
+DataSource: root:123123@tcp(127.0.0.1:3306)/school_resources?charset=utf8mb4&parseTime=True&loc=Local

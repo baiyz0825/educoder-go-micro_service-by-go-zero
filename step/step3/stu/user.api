@@ -1,0 +1,27 @@
+syntax = "v1"
+
+info(
+	author: "educoder"
+	date:   "2023-05-10"
+	desc:   "api user"
+)
+// 这里开始编写你的API文件 请使用单type声明多个结构
+
+type (
+	UserLoginReq {
+		UserName string `json:"userName"`
+		Passwd   string `json:"passwd"`
+	}
+	UserLoginResp {
+		Token string `json:"token"`
+	}
+)
+@server(
+	group: user
+)
+service user-api{
+	@doc "doc"
+	@handler Login
+	// 接口: 请求方法、路由、请求入参、返回值
+	post /login (UserLoginReq) returns (UserLoginResp)
+}

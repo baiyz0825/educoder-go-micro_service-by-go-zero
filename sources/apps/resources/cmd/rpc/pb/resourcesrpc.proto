@@ -1,0 +1,419 @@
+syntax = "proto3";
+
+option go_package = "./pb";
+
+package pb;
+
+// ------------------------------------ 
+// Messages
+// ------------------------------------ 
+
+//--------------------------------资源分类信息--------------------------------
+message Classification {
+  int64 classID = 1; //资源id
+  int64 classParentID = 2; //父分类ID
+  string className = 3; //分类名称
+  int64 classResourceNum = 4; //分类下资源数量
+  int64 createTime = 5; //创建时间
+  int64 updateTime = 6; //更新时间
+}
+
+message AddClassificationReq {
+  int64 classParentID = 1; //父分类ID
+  string className = 2; //分类名称
+  int64 classResourceNum = 3; //分类下资源数量
+}
+
+message AddClassificationResp {
+}
+
+message UpdateClassificationReq {
+  int64 classID = 1; //资源id
+  int64 classParentID = 2; //父分类ID
+  string className = 3; //分类名称
+  int64 classResourceNum = 4; //分类下资源数量
+}
+
+message UpdateClassificationResp {
+}
+
+message DelClassificationReq {
+  int64 ID = 1; //id
+}
+
+message DelClassificationResp {
+}
+
+message GetClassificationByIdReq {
+  int64 ID = 1; //id
+}
+
+message GetClassificationByIdResp {
+  Classification classification = 1; //classification
+}
+
+message ClassificationDataByPagesReq {
+  int64 page = 1; //page
+  int64 limit = 2; //limit
+  int64 classificationID = 3; //分类ID
+  // 是否用户查询自己的
+  int64  userId = 4;
+  int64 resType = 5;
+  // 关键词 名称
+  string KeyWord = 6;
+}
+
+message ClassificationDataByPagesResp {
+  repeated File files = 1; //File
+  int64 filesTotal = 2; // 文件总数
+  repeated OnlineText onlineText = 3; //text
+  int64 textsTotal = 4; // 文件总数
+}
+
+message ClassificationTreeMenu{
+  int64 classID = 1; //资源id
+  int64 classParentID = 2; //父分类ID
+  string className = 3; //分类名称
+  int64 classResourceNum = 4; //分类下资源数量
+  repeated ClassificationTreeMenu children = 5; // 子分类数据
+}
+
+message SearchClassificationAllReq {
+}
+
+message SearchClassificationAllResp{
+  repeated ClassificationTreeMenu classifications = 1; // 分类数据
+}
+
+
+//--------------------------------用户上传资源量统计信息--------------------------------
+message Count {
+  int64 ID = 1; //用户上传数据记录id
+  int64 uID = 2; //用户id
+  int64 fileNum = 3; //用户存储文件数量
+  int64 videoNum = 4; //用户存储视频数量
+  int64 picNum = 5; //用户存储图片数量
+  int64 storageSize = 6; //用户存储空间占用（mb）不足mb按mb计算
+  int64 createTime = 7; //创建时间
+  int64 updateTime = 8; //更新时间
+}
+
+message AddCountReq {
+  int64 uID = 1; //用户id
+  int64 fileNum = 2; //用户存储文件数量
+  int64 videoNum = 3; //用户存储视频数量
+  int64 picNum = 4; //用户存储图片数量
+  int64 storageSize = 5; //用户存储空间占用（mb）不足mb按mb计算
+}
+
+message AddCountResp {
+}
+
+message UpdateCountReq {
+  int64 ID = 1; //用户上传数据记录id
+  int64 uID = 2; //用户id
+  int64 fileNum = 3; //用户存储文件数量
+  int64 videoNum = 4; //用户存储视频数量
+  int64 picNum = 5; //用户存储图片数量
+  int64 storageSize = 6; //用户存储空间占用（mb）不足mb按mb计算
+}
+
+message UpdateCountResp {
+}
+
+message DelCountReq {
+  int64 id = 1; //id
+}
+
+message DelCountResp {
+}
+
+message GetCountByIdReq {
+  int64 id = 1; //id
+}
+
+message GetCountByIdResp {
+  Count count = 1; //count
+}
+
+message GetCountByUIdReq {
+  int64 Uid = 1; //id
+}
+
+message GetCountByUIdResp {
+  Count count = 1; //count
+}
+
+//--------------------------------文件资源存储表（非文本类型）--------------------------------
+message File {
+  int64 ID = 1; //文件自增id
+  int64 UUID = 2; //文件uuid唯一标识
+  string name = 3; //文件名称
+  string obfuscateName = 4; //文件混淆名称
+  int64 size = 5; //文件占用空间大小（kb）
+  int64 owner = 6; //对应用户id
+  int64 status = 7; //0:已删除（云端） 1:（本地存储状态） 2:（云端存储状态，末态） 3:(用户隐藏状态）
+  int64 type = 8; //文件所属类型 文本0、文件1、视频2、图片3
+  int64 class = 9; //文件所属分类
+  string suffix = 10; //文件后缀信息
+  int64 downloadAllow = 11; //是否允许查看 0 no 1 yes
+  string link = 12; //文件云端存储目录
+  string filePoster = 13; // 文件头图
+  int64 createTime = 14; //创建时间
+  int64 updateTime = 15; //更新时间
+}
+
+message AddFileReq {
+  string name = 1; //文件名称
+  string obfuscateName = 2; //文件混淆名称
+  int64 size = 3; //文件占用空间大小（kb）
+  int64 owner = 4 ; //对应用户id
+  int64 status = 5; //0:已删除（云端） 1:（本地存储状态） 2:（云端存储状态，末态） 3:(用户隐藏状态）
+  int64 type = 6; //文件所属类型 文本0、文件1、视频2、图片3
+  int64 class = 7; //文件所属分类
+  string suffix = 8; //文件后缀信息
+  int64 downloadAllow = 9; //是否允许查看 0 no 1 yes
+  string link = 10; //文件云端存储目录
+  string filePoster = 11;// 文件头图
+}
+
+message AddFileResp {
+}
+
+message UpdateFileReq {
+  int64 ID = 1; //文件自增id
+  string name = 2; //文件名称
+  string obfuscateName = 3; //文件混淆名称
+  int64 size = 4; //文件占用空间大小（kb）
+  int64 owner = 5; //对应用户id
+  int64 status = 6; //0:已删除（云端） 1:（本地存储状态） 2:（云端存储状态，末态） 3:(用户隐藏状态）
+  int64 type = 7; //文件所属类型 文本0、文件1、视频2、图片3
+  int64 class = 8; //文件所属分类
+  string suffix = 9; //文件后缀信息
+  int64 downloadAllow = 10; //是否允许查看 0 no 1 yes
+  string link = 11; //文件云端存储目录
+  string filePoster = 12; // 文件头图
+}
+
+message UpdateFileResp {
+}
+
+message DelFileReq {
+  int64 ID = 1; //id
+}
+
+message DelFileResp {
+}
+
+message GetFileByIdReq {
+  int64 ID = 1; //id
+}
+
+message GetFileByIdResp {
+  File file = 1; //file
+}
+
+message SearchFileConditionReq {
+  int64 page = 1; //page
+  int64 limit = 2; //limit
+  string name = 3; //文件名称
+  int64 owner = 4; //对应用户id
+  int64 status = 5; //0:已删除（云端） 1:（本地存储状态） 2:（云端存储状态，末态） 3:(用户隐藏状态）
+  int64 type = 6; //文件所属类型 文本0、文件1、视频2、图片3
+  int64 class = 7; //文件所属分类
+  string suffix = 8; //文件后缀信息
+}
+
+message SearchFileConditionResp {
+  repeated File file = 1; //file
+}
+
+message CheckDownloadAllowReq{
+  int64 fileId = 1; // 文件id
+}
+
+message CheckDownloadAllowResp{
+  bool isAllow = 1; // 是否允许
+}
+
+
+//--------------------------------在线文本资源信息--------------------------------
+message OnlineText {
+  int64 ID = 1; //在线文本自增id
+  int64 UUID = 2; //文本uuid
+  int64 typeSuffix = 3; //文本输入格式（0 markdown）
+  int64 owner = 4; //所属用户
+  string content = 5; //存储实际内容
+  int64 classID = 6; //所属资源分类id
+  int64 permission = 7; //是否允许查看 0 no 1 yes
+  string textPoster = 8; // 文件头图
+  string textName = 9 ; // 文本资源名称
+  int64 createTime = 10; //创建时间
+  int64 updateTime = 11; //更新时间
+}
+
+message AddOnlineTextReq {
+  int64 typeSuffix = 1; //文本输入格式（0 markdown）
+  int64 owner = 2; //所属用户
+  string content = 3; //存储实际内容
+  int64 classID = 4; //所属资源分类id
+  int64 permission = 5; //是否允许查看 0 no 1 yes
+  string textPoster = 6; // 文件头图
+  string textName = 7 ; // 文本资源名称
+}
+
+message AddOnlineTextResp {
+}
+
+message UpdateOnlineTextReq {
+  int64 ID = 1; //在线文本自增id
+  string content = 2 ; //存储实际内容
+  int64 classID = 3; //所属资源分类id
+  int64 permission = 4; //是否允许查看 0 no 1 yes
+  string textPoster = 5; // 文件头图
+  string textName = 6 ; // 文本资源名称
+}
+
+message UpdateOnlineTextResp {
+}
+
+message DelOnlineTextReq {
+  int64 ID = 1; //id
+}
+
+message DelOnlineTextResp {
+}
+
+message GetOnlineTextByIdReq {
+  int64 ID = 1; //id
+}
+
+message GetOnlineTextByIdResp {
+  OnlineText onlineText = 1; //onlineText
+}
+
+message SearchOnlineConditionTextReq {
+  int64 page = 1; //page
+  int64 limit = 2; //limit
+  int64 owner = 3; //所属用户
+  int64 classID = 4; //所属资源分类id
+  int64 permission = 5; //是否允许查看 0 no 1 yes
+}
+
+message SearchOnlineTextConditionResp {
+  repeated OnlineText onlineText = 1; //onlineText
+}
+
+//--------------------------------资源评论信息--------------------------------
+message ResComment {
+  int64 ID = 1; //评论自增id
+  int64 owner = 2; //评论所属人信息
+  int64 resourceID = 3; //资源id
+  string content = 4; //评论内容
+  int64 createTime = 5; //创建时间
+  int64 updateTime = 6; //更新时间
+}
+
+message AddResCommentReq {
+  int64 owner = 1; //评论所属人信息
+  int64 resourceID = 2; //资源id
+  string content = 3; //评论内容
+}
+
+message AddResCommentResp {
+}
+
+message UpdateResCommentReq {
+  int64 ID = 1; //评论自增id
+  int64 owner = 2; //评论所属人信息
+  int64 resourceID = 3; //资源id
+  string content = 4; //评论内容
+}
+
+message UpdateResCommentResp {
+}
+
+message DelResCommentReq {
+  int64 ID = 1; //id
+}
+
+message DelResCommentResp {
+}
+
+message GetResCommentByIdReq {
+  int64 ID = 1; //id
+}
+
+message GetResCommentByIdResp {
+  ResComment resComment = 1; //resComment
+}
+
+// 支持资源信息
+message SearchResCommentByUserOrResIdReq {
+  int64 page = 1; //page
+  int64 limit = 2; //limit
+  int64 owner = 3; //评论所属人信息
+  int64 resourceID = 4; //资源id
+}
+
+message SearchResCommentByUserOrResIdResp {
+  repeated ResComment resComment = 1; //resComment
+}
+
+message GetFilResourcesUSerIdReq{
+  int64 resourcesId = 1;// 产品id
+}
+
+message GetFilResourcesUSerIdResp{
+  int64 userId = 1; // 用户id
+}
+// ------------------------------------ 
+// Rpc Func
+// ------------------------------------ 
+
+service resourcesrpc{
+
+  //-----------------------资源分类信息-----------------------
+  rpc AddClassification(AddClassificationReq) returns (AddClassificationResp);
+  rpc UpdateClassification(UpdateClassificationReq) returns (UpdateClassificationResp);
+  rpc DelClassification(DelClassificationReq) returns (DelClassificationResp);
+  rpc GetClassificationById(GetClassificationByIdReq) returns (GetClassificationByIdResp);
+  // 查询全部分类
+  rpc SearchClassificationAll(SearchClassificationAllReq) returns (SearchClassificationAllResp);
+  // 分类查询分类id下的资源
+  rpc GetClassificationDataByPages(ClassificationDataByPagesReq) returns (ClassificationDataByPagesResp);
+
+  //-----------------------用户上传资源量统计信息-----------------------
+  rpc AddCount(AddCountReq) returns (AddCountResp);
+  rpc UpdateCount(UpdateCountReq) returns (UpdateCountResp);
+  rpc DelCount(DelCountReq) returns (DelCountResp);
+  rpc GetCountById(GetCountByIdReq) returns (GetCountByIdResp);
+  rpc GetCountByUId(GetCountByUIdReq) returns (GetCountByUIdResp);
+
+
+  //-----------------------文件资源存储表（非文本类型）-----------------------
+  rpc AddFile(AddFileReq) returns (AddFileResp);
+  rpc UpdateFile(UpdateFileReq) returns (UpdateFileResp);
+  rpc DelFile(DelFileReq) returns (DelFileResp);
+  rpc GetFileById(GetFileByIdReq) returns (GetFileByIdResp);
+  // 多条件查询（大类，用户id / 全部文件中筛选）
+  rpc SearchFileConditionPages(SearchFileConditionReq) returns (SearchFileConditionResp);
+  // 检查文件是否允许下载
+  rpc CheckDownloadAllow(CheckDownloadAllowReq) returns (CheckDownloadAllowResp);
+  rpc GetFilResourcesUSerId(GetFilResourcesUSerIdReq) returns(GetFilResourcesUSerIdResp);
+  //-----------------------在线文本资源信息-----------------------
+  rpc AddOnlineText(AddOnlineTextReq) returns (AddOnlineTextResp);
+  rpc UpdateOnlineText(UpdateOnlineTextReq) returns (UpdateOnlineTextResp);
+  rpc DelOnlineText(DelOnlineTextReq) returns (DelOnlineTextResp);
+  rpc GetOnlineTextById(GetOnlineTextByIdReq) returns (GetOnlineTextByIdResp);
+  // 多条件查询（大类，用户id / 全部文件中筛选）
+  rpc SearchOnlineConditionText(SearchOnlineConditionTextReq) returns (SearchOnlineTextConditionResp);
+  //-----------------------资源评论信息-----------------------
+  rpc AddResComment(AddResCommentReq) returns (AddResCommentResp);
+  rpc UpdateResComment(UpdateResCommentReq) returns (UpdateResCommentResp);
+  rpc DelResComment(DelResCommentReq) returns (DelResCommentResp);
+  rpc GetResCommentById(GetResCommentByIdReq) returns (GetResCommentByIdResp);
+  // 查询某一个资源下评论 ， 查询用户全部评论
+  rpc SearchResCommentByUserOrResId(SearchResCommentByUserOrResIdReq) returns (SearchResCommentByUserOrResIdResp);
+
+}

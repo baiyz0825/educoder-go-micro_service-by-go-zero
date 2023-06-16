@@ -1,0 +1,151 @@
+syntax = "v1"
+
+info(
+    title: "用户实体信息"
+    desc: "用户数据相关结构体"
+    author: "baiyz0825"
+    email: "byz0825@outlook.com"
+    version: "v0.1"
+)
+
+type SocialBind {
+    id int64 `json:"id"`
+    name string `json:"name"`
+}
+
+// 用户数据
+type User {
+    // 用户id
+    UserId int64 `json:"userId"`
+    // 用户唯一id
+    UserUniqueId int64 `json:"userUniqueId"`
+    // 用户名
+    UserName string `json:"userName"`
+    // 年龄
+    Age int64 `json:"age"`
+    // 性别
+    Gender string `json:"gender"`
+    // 手机号
+    Phone string `json:"phone"`
+    // 邮件
+    Email string `json:"email"`
+    // 年纪
+    Grade string `json:"grade"`
+    // 专业
+    Major string `json:"major"`
+    // 用户评级
+    Star string `json:"star"`
+    // 头像
+    Avatar string `json:"avatar"`
+    // 签名
+    Sign string `json:"sign"`
+    // 班级
+    Class string `json:"class"`
+    // 绑定的社交账户类型 {key:v} 类似 微信：社交账户
+    SocialBind []SocialBind `json:"socialBind"`
+}
+
+
+type (
+    // 用户登陆请求
+    LoginReq {
+        // 手机号
+        Phone string `form:"phone" validate:"required,zh_cn_phone"`
+        // 邮箱
+        Email string `form:"email,optional" validate:"omitempty,email"`
+        // 密码
+        Password string `form:"password" validate:"required,password"`
+        // 验证码
+        Captcha string `form:"captcha" validate:"required"`
+        // 验证码id
+        CaptchaId string `form:"captchaId" validate:"required"`
+    }
+        // 登陆响应
+    LoginResp {
+        AccessToken string `json:"accessToken"`
+        ExpireTime string `json:"expireTime"`
+    }
+)
+
+type (
+    ChaptchaResp {
+        CaptchaB64 string `json:"captchaB64"`
+        CaptchaId string `json:"captchaId"`
+    }
+)
+
+
+
+type (
+    // 注册请求
+    RegisterReq {
+        // 用户名
+        Username string `form:"username" validate:"required"`
+        // 密码
+        Password string `form:"password" validate:"required,password"`
+        // 电话
+        Phone string `form:"phone" validate:"required,zh_cn_phone"`
+        // 验证码
+        Captcha string `form:"captcha" validate:"required"`
+        // 验证码id
+        CaptchaId string `form:"captchaId" validate:"required"`
+    }
+        // 注册响应
+    RegisterResp {
+        AccessToken string `json:"accessToken"`
+        RefreshToken string `json:"refreshToken"`
+        ExpireTime string `json:"expireTime"`
+    }
+)
+
+
+type (
+    // 用户个人详情数据
+    UserInfoResp {
+        // 用户个人数据
+        UserInfo User `json:"userInfo"`
+    }
+)
+
+// 用户修改个人数据请求
+type (
+    UserDataReq {
+        // 用户名
+        Username string `form:"username" validate:"required"`
+        // 密码
+        Passsword string `form:"passsword" validate:"required,password"`
+        // 签名
+        Sign string `form:"sign,optional"`
+        // 头像
+        //        Avatar string `form:"avatar,optional"`
+        // 电话
+        Phone string `form:"phone" validate:"required,zh_cn_phone"`
+        // 邮箱
+        Email string `form:"email" validate:"required,email"`
+        // 年龄
+        Age int64 `form:"age,optional" validate:"omitempty,gte=0,lte=120"`
+        // 性别 男女
+        Gender int64 `form:"gender,optional"`
+        // 关联信息字段
+        Major int64 `form:"major,optional"`
+        // 年纪
+        Grade int64 `form:"grade,optional"`
+        // 班级
+        Class int64 `form:"class,optional"`
+    }
+)
+
+// 用户主修课程
+type (
+    Major {
+        ID int64 `json:"id"`     //专业ID
+        name string `json:"name"`//专业名称
+        desc string `json:"desc"`//专业描述
+    }
+    getAllMajorsResp {
+        major []Major `json:"major"`
+    }
+)
+
+
+

@@ -1,0 +1,70 @@
+syntax = "v1"
+
+info(
+    title: "商品中心结构体"
+    desc: "商品信息结构体定义，包含商品"
+    author: "baiyz0825"
+    email: "byz0825@outlook.com"
+    version: "v0.1"
+)
+
+type (
+    Product {
+        //产品id
+        ID int64 `json:"id"`
+        //产品唯一标识
+        UUID int64 `json:"uuid"`
+        //产品名称
+        name string `json:"name"`
+        //产品分类(与资源分类一致)
+        fileType int64 `json:"fileType"`
+        // 绑定的发布资源信息
+        priductBind int64 `json:"priductBind"`
+        //产品所属发布人
+        owner int64 `json:"owner"`
+        //产品价格
+        price float64 `json:"price"`
+        //是否已销售 0 no 1 yes
+        saled int64 `json:"saled"`
+        //创建时间
+        createTime int64 `json:"createTime"`
+        //更新时间
+        updateTime int64 `json:"updateTime"`
+    }
+)
+
+
+type (
+    searchProductByConditionReq {
+        page int64 `json:"page" validate:"required,gt=0"`
+        limit int64 `json:"limit" validate:"required,gt=0"`
+        productType int64 `json:"productType,optional"`
+        name string `json:"name,optional"`
+        bottonPrice float64 `json:"bottonPrice,optional"`
+        topPrice float64 `json:"topPrice,optional"`
+        desc bool `json:"desc,optional"`
+    }
+    searchProductByConditionResp {
+        products []Product `json:"products"`
+    }
+
+    addProductReq {
+        name string `json:"name" validate:"required"`
+        // 绑定的发布资源信息
+        priductBind int64 `json:"priductBind" validate:"required,gt=0"`
+        price float64 `json:"price" validate:"required,gt=0"`
+    }
+
+    delOneReq {
+        ID int64 `form:"id" validate:"required,gt=0"`
+        UUID int64 `form:"uuid,optional" validate:"omitempty,gt=0"`
+    }
+
+    GetProductInfoReq{
+        ID int64 `form:"id" validate:"required,gt=0"`
+        UUID int64 `form:"uuid,optional" validate:"omitempty,gt=0"`
+    }
+    GetProductInfoResp{
+        product Product `json:"product"`
+    }
+)

@@ -1,0 +1,253 @@
+syntax = "proto3";
+
+option go_package = "./pb";
+
+package pb;
+
+// ------------------------------------ 
+// Messages
+// ------------------------------------ 
+
+//--------------------------------订单表--------------------------------
+message Order {
+  int64 id = 1; //订单id
+  int64 uuid = 2; //唯一订单流水号
+  int64 productId = 3; //商品中的商品id
+  int64 sysModel = 4; //订单来源模块（0 商品模块）
+  int64 status = 5; //订单状态（0:创建    1:付款中   2:付款成功    3:已发货   4:用户已确认）
+  int64 userId = 6; //下订单用户id
+  double payPrice = 7; //实际订单生成金额
+  int64 payPath = 8; //支付渠道（0:微信  1:支付宝 ）        
+  string payPathOrderNum = 9; //支付渠道流水号
+  string payCodeURL = 10;
+  int64 createTime = 11; //创建时间
+  int64 updateTime = 12; //更新时间
+}
+
+message AddOrderReq {
+  int64 productId = 1; //商品中的商品id
+  int64 sysModel = 2; //订单来源模块（0 商品模块）
+  int64 status = 3; //订单状态（0:创建    1:付款中   2:付款成功    3:已发货   4:用户已确认）
+  int64 userId = 4; //下订单用户id
+  double payPrice = 5; //实际订单生成金额
+  int64 payPath = 6; //支付渠道（0:微信  1:支付宝 ）
+  string payPathOrderNum = 7; //支付渠道流水号
+}
+
+message AddOrderResp {
+  int64 uuid = 1 ;// 系统订单交易流水号
+  int64 id = 2; // 系统订单Id
+  int64 status = 3; // 订单创建状态
+  int64 payPath = 4; // 订单支付渠道
+  string PayPathOrderNum = 5 ;// 三方支付订单编号
+}
+
+message UpdateOrderReq {
+  int64 id = 1; //订单id
+  int64 status = 2; //订单状态（0:创建    1:付款中   2:付款成功    3:已发货   4:用户已确认）
+  string payPathOrderNum = 3; //支付渠道流水号
+}
+
+message UpdateOrderResp {
+  int64 id = 1; //订单id
+  int64 uuid = 2; //订单唯一id
+}
+
+message DelOrderReq {
+  int64 id = 1; //id
+}
+
+message DelOrderResp {
+}
+
+message GetOrderByIdReq {
+  int64 id = 1; //id
+}
+
+message GetOrderByIdResp {
+  Order order = 1; //order
+}
+
+message SearchOrderByConditionReq {
+  int64 page = 1; //page
+  int64 limit = 2; //limit
+  int64 productId = 3; //商品中的商品id
+  int64 sysModel = 4; //订单来源模块（0 商品模块）
+  int64 status = 5; //订单状态（0:创建    1:付款中   2:付款成功    3:已发货   4:用户已确认）
+  int64 userId = 6; //下订单用户id
+  double payPrice = 7; //实际订单生成金额
+  int64 payPath = 8; //支付渠道（0:微信  1:支付宝 ）
+  int64 fromTime = 9; //开始时间
+  int64 toTime = 10; //截至时间
+}
+
+message SearchOrderByConditionResp {
+  repeated Order order = 1; //order
+  int64 total = 2;// 总页数
+}
+
+message GetOrderInfoByUserIdAndProductIdReq{
+  int64 productId = 1;
+  int64 userId = 2;
+}
+message GetOrderInfoByUserIdAndProductIdResp {
+  Order order = 1; //order
+}
+
+
+message GetOrderInfoByUUIDAndUserIDReq{
+  int64 userId = 1;
+  int64 uuid = 2;
+}
+
+message GetOrderInfoByUUIDAndUserIDResp{
+  Order order = 1; //order
+}
+//--------------------------------用户收入支出统计--------------------------------
+message UserEarn {
+  int64 id = 1; //统计表id
+  int64 userId = 2; //用户id
+  double earnNum = 3; //用户入账
+  double payNum = 4; //用户支出价格
+  int64 createTime = 5; //创建时间
+  int64 updateTime = 6; //更新时间
+}
+
+message AddUserEarnReq {
+  int64 userId = 1; //用户id
+  double earnNum = 2; //用户入账
+  double payNum = 3; //用户支出价格
+}
+
+message AddUserEarnResp {
+}
+
+
+message DelUserEarnReq {
+  int64 id = 1; //id
+}
+
+message DelUserEarnResp {
+}
+
+message GetUserEarnByIdReq {
+  int64 id = 1; //id
+}
+
+message GetUserEarnByIdResp {
+  UserEarn userEarn = 1; //userEarn
+}
+
+message SearchUserEarnByConditionReq {
+  int64 page = 1; //page
+  int64 limit = 2; //limit
+  int64 id = 3; //统计表id
+  int64 userId = 4; //用户id
+  int64 fromTime = 5; //开始时间
+  int64 toTime = 6; //截至时间
+}
+
+message SearchUserEarnByConditionResp {
+  repeated UserEarn userEarn = 1; //userEarn
+}
+
+message DoOrderReq{
+  int64 ProductId = 1 ;// 商品id
+  int64 UserId = 2; // 用户id
+  int64 PayPath = 3;// 支付渠道
+
+}
+message DoOrderResp{
+  string PayPathOrderNum = 1; // 订单号码
+  int64 Status = 2; // 订单状态
+  string PayUrl = 3; // 订单支付二维码
+}
+
+message DeleteOrderAliAndDbReq{
+  int64 Uuid = 1; // 订单uuid
+  int64 UserId = 2; // 订单用户id
+  string PayPathOrderNum = 3; // 订单支付流水号
+}
+
+message DeleteOrderAliAndDbResp{
+  bool status = 1;
+}
+
+message GetOrderUUIdByLimitAndStatusReq{
+  int64 limit = 1; // 拉取数量限制
+  int64 status = 2;// 订单状态
+}
+message GetOrderUUIdByLimitAndStatusResp{
+  repeated int64 orderUUid = 1 ;// 查询的订单id
+}
+
+message GetOrderStatusByUUIDReq{
+  int64 orderUUid = 1 ;// 查询的订单id
+}
+
+message  GetOrderStatusByUUIDResp{
+  int64 status = 1 ;// 检查结果
+  bool isDelete = 2; // 更新数量
+}
+
+message CheckAilPayStatusReq{
+  int64 orderUuid = 1;//订单编号
+}
+
+message CheckAilPayStatusResp{
+  int64 status = 1;// 订单支付状态
+  string aliPayStatus = 2;// 阿里订单支付状态码
+}
+
+message UpdateOrderStatusReq{
+  int64 status = 1; // 订单状态
+  bool NeedDelete = 2; // 是否需要删除
+  int64 uuid = 3; // 订单编号
+}
+
+message UpdateOrderStatusResp{
+}
+
+
+message GetProductBindAndPricesReq{
+}
+
+message ProductBindAndPrices{
+  int64 ProductID = 1;// 绑定产品id
+  double Total = 2; // 用户消费当前价格
+}
+
+message GetProductBindAndPricesResp{
+  repeated ProductBindAndPrices ProductBindPrice = 1;// 价格和产品绑定
+}
+
+// ------------------------------------ 
+// Rpc Func
+// ------------------------------------ 
+
+service orderrpc{
+
+  //-----------------------订单表-----------------------
+  rpc AddOrder(AddOrderReq) returns (AddOrderResp);
+  rpc UpdateOrder(UpdateOrderReq) returns (UpdateOrderResp);
+  rpc DelOrder(DelOrderReq) returns (DelOrderResp);
+  rpc GetOrderById(GetOrderByIdReq) returns (GetOrderByIdResp);
+  rpc SearchOrderByCondition(SearchOrderByConditionReq) returns (SearchOrderByConditionResp);
+  rpc GetOrderInfoByUserIdAndProductId(GetOrderInfoByUserIdAndProductIdReq) returns (GetOrderInfoByUserIdAndProductIdResp);
+  rpc GetOrderInfoByUUIDAndUserId(GetOrderInfoByUUIDAndUserIDReq) returns (GetOrderInfoByUUIDAndUserIDResp);
+  rpc GetOrderUUIdByLimitAndStatus(GetOrderUUIdByLimitAndStatusReq) returns(GetOrderUUIdByLimitAndStatusResp);
+  rpc GetOrderStatusByUUID(GetOrderStatusByUUIDReq) returns (GetOrderStatusByUUIDResp);
+  rpc CheckAilPayStatus(CheckAilPayStatusReq) returns(CheckAilPayStatusResp);
+  rpc UpdateOrderStatus(UpdateOrderStatusReq) returns(UpdateOrderStatusResp);
+  rpc GetProductBindAndPrices(GetProductBindAndPricesReq)returns (GetProductBindAndPricesResp);
+  //-----------------------用户收入支出统计-----------------------
+  rpc AddUserEarn(AddUserEarnReq) returns (AddUserEarnResp);
+  rpc DelUserEarn(DelUserEarnReq) returns (DelUserEarnResp);
+  rpc GetUserEarnById(GetUserEarnByIdReq) returns (GetUserEarnByIdResp);
+  rpc SearchUserEarnByCondition(SearchUserEarnByConditionReq) returns (SearchUserEarnByConditionResp);
+  rpc UpsertUserEarn(AddUserEarnReq)returns(AddUserEarnResp);
+  //----- 下订单
+  rpc DoOrder(DoOrderReq) returns(DoOrderResp);
+  rpc DeleteOrderAliAndDb(DeleteOrderAliAndDbReq) returns (DeleteOrderAliAndDbResp);
+
+}

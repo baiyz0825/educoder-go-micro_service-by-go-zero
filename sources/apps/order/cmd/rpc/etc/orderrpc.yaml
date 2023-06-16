@@ -1,0 +1,31 @@
+Name: orderrpc
+ListenOn: 0.0.0.0:8010
+Mode: dev
+Log:
+  ServiceName: orderrpc
+  Mode: console
+  Encoding: plain
+  Path: logs
+  TimeFormat: 2006-01-02T15:04:05.000Z07:00
+  Level: debug
+  KeepDays: 2
+  StackCooldownMillis: 100
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+DataSource: root:123123@tcp(127.0.0.1:3306)/school_order?charset=utf8mb4&parseTime=True&loc=Local
+AliPay:
+  AppId: "2021000122683492"
+  IsProduction: false
+  PayCallBackUrl:
+  NoticeUrl:
+  AppPublicCertPath: etc/cert/appPublicCert.crt
+  ALiPayRootCertPath: etc/cert/alipayRootCert.crt
+  ALiPayPublicCertPath: etc/cert/alipayPublicCert.crt
+  AppPrivateKeyPath: etc/cert/appPrivateKey.txt
+  ContentAesKey: yzS0whYsNGtfLEDZKBOl0Q==
+  # 支付宝消息回调接口
+  PayNoticeCallBackUrl: https://test.baiyz.test.xxx/trade/v1/order/apy/ali/callback
+TradeRpcConfig:
+  Endpoints:
+    - 127.0.0.1:8012

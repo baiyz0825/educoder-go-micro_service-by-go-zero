@@ -1,0 +1,35 @@
+Name: api.user
+Host: 0.0.0.0
+Port: 8003
+UserRpcConfig:
+  Endpoints:
+    - 127.0.0.1:8013
+Auth:
+  AccessSecret: abcd1234
+  AccessExpire: 1200
+Log:
+  ServiceName: api.user
+  Mode: console
+  Encoding: plain
+  Path: logs
+  TimeFormat: 2006-01-02T15:04:05.000Z07:00
+  Level: debug
+  KeepDays: 2
+  StackCooldownMillis: 100
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+  Tls: false
+#AliCloud:
+#  AccessKeyId: # 阿里云key
+#  AccessKeySecret: # 密钥
+#  BucketName: # 存储桶名称
+#  EndPoint: # 地域地址
+#  UserCachePath: cache/user
+#
+AliCloud:
+  AccessKeyId: 你的accesskeyId
+  AccessKeySecret: 你的accesskeySecret
+  BucketName: graduating-project
+  EndPoint: 你的OSS endPoint
+  UserCachePath: cache/user

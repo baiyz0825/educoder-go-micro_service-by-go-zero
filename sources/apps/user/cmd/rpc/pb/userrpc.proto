@@ -1,0 +1,299 @@
+syntax = "proto3";
+
+option go_package = "./pb";
+
+package pb;
+
+// ------------------------------------ 
+// Messages
+// ------------------------------------ 
+message Empty{
+
+}
+//--------------------------------用户专业统计表--------------------------------
+message Major {
+  int64 ID = 1; //专业ID
+  string name = 2; //专业名称
+  string desc = 3; //专业描述
+}
+
+message AddMajorReq {
+  string name = 1; //专业名称
+  string desc = 2; //专业描述
+}
+
+message AddMajorResp {
+}
+
+message UpdateMajorReq {
+  int64 ID = 1; //专业ID
+  string name = 2; //专业名称
+  string desc = 3; //专业描述
+}
+
+message UpdateMajorResp {
+}
+
+message DelMajorReq {
+  int64 ID = 1; //ID
+}
+
+message DelMajorResp {
+}
+
+message GetMajorByIdReq {
+  int64 ID = 1; //ID
+}
+
+message GetMajorByIdResp {
+  Major major = 1; //major
+}
+
+message GetMajorPagesReq {
+  int64 page = 1; //page
+  int64 limit = 2; //limit
+}
+
+message GetMajorPagesResp {
+  repeated Major major = 1; //major
+}
+
+//--------------------------------用户三方关联数据--------------------------------
+message Third {
+  int64 ID = 1; //用户三方数据自增ID
+  int64 userID = 2; //唯一三方数据ID
+  int64 type = 3; //微信0、QQ1、Github2、Gitee3 
+  string accessToken = 4; //默认访问密钥
+  string refereshToken = 5; //刷新token
+  int64 acctokenExpire = 6; //过期时间
+  int64 createTime = 7; //创建时间
+  int64 updateTime = 8; //更新时间
+}
+
+message AddThirdReq {
+  int64 userID = 1; //唯一三方数据ID
+  int64 type = 2; //微信0、QQ1、Github2、Gitee3
+  string accessToken = 3; //默认访问密钥
+  string refereshToken = 4; //刷新token
+  int64 acctokenExpire = 5; //过期时间
+}
+
+message AddThirdResp {
+}
+
+message UpdateThirdReq {
+  int64 ID = 1; //用户三方数据自增ID
+  int64 type = 3; //微信0、QQ1、Github2、Gitee3 
+  string accessToken = 4; //默认访问密钥
+  string refereshToken = 5; //刷新token
+  int64 acctokenExpire = 6; //过期时间
+}
+
+message UpdateThirdResp {
+}
+
+message DelThirdReq {
+  int64 ID = 1; //ID
+}
+
+message DelThirdResp {
+}
+
+message GetThirdByIdReq {
+  int64 ID = 1; //ID
+}
+
+message GetThirdByIdResp {
+  Third third = 1; //third
+}
+
+message GetThirdByUserIdAndTypeReq{
+  int64 userID = 1; //用户三方数据自增ID
+  int64 type = 2; //微信0、QQ1、Github2、Gitee3
+}
+
+message GetThirdByUserIdAndTypeResp {
+  repeated Third third = 1; //third
+}
+
+message ThirdBind{
+  string ThirdName = 1;
+  int64 ThirdType = 2;
+  int64 ThirdId = 3;
+}
+
+message GetThirdBindDataReq{
+  int64 userID = 1; //用户三方数据自增ID
+}
+
+message GetThirdBindDataResp{
+  repeated ThirdBind thirds = 1;
+}
+
+//--------------------------------第三方用户数据--------------------------------
+message ThirdData {
+  int64 ID = 1; //三方数据自增ID
+  int64 userID = 2; //用户ID
+  int64 thirdID = 3; //三方id
+  string name = 4; //三方用户名称
+  string sign = 5; //三方数据签名
+  int64 createTime = 6; //创建时间
+  int64 updateTime = 7; //更新时间
+}
+
+message AddThirdDataReq {
+  int64 userID = 1; //用户ID
+  int64 thirdID = 2; //三方id
+  string name = 3; //三方用户名称
+  string sign = 4; //三方数据签名
+}
+
+message AddThirdDataResp {
+}
+
+message UpdateThirdDataReq {
+  int64 ID = 1; //三方数据自增ID
+  string name = 3; //三方用户名称
+  string sign = 4; //三方数据签名
+}
+
+message UpdateThirdDataResp {
+}
+
+message DelThirdDataReq {
+  int64 ID = 1; //ID
+}
+
+message DelThirdDataResp {
+}
+
+message GetThirdDataByIdReq {
+  int64 ID = 1; //ID
+}
+
+message GetThirdDataByIdResp {
+  ThirdData thirdData = 1; //thirdData
+}
+
+message GetThirdDataByThirdIdResp {
+  repeated ThirdData thirdData = 1; //thirdData
+}
+
+message GetThirdDataByThirdIdReq{
+  int64 thirdID = 1; //用户IDs
+}
+
+//--------------------------------用户数据基本信息表--------------------------------
+message User {
+  int64 uID = 1; //数据表自增ID
+  int64 uniqueID = 2; //用户唯一数据ID
+  string name = 3; //用户名称
+  string password = 4; //用户密码
+  int64 age = 5; //用户年龄
+  int64 gender = 6; //用户性别
+  string phone = 7; //用户电话
+  string email = 8; //用户邮箱
+  int64 grade = 9; //用户年纪 （大一、大二、大三、大四） 1，2，3，4
+  int64 major = 10; //用户专业信息(关联字段)
+  double star = 11; //用户等级(0~5)
+  string avatar = 12; //用户头像链接
+  string sign = 13; //用户个性签名
+  int64 class = 14; //用户班级
+  int64 createTime = 15; //创建时间
+  int64 updateTime = 16; //更新时间
+}
+
+message AddUserReq {
+  string name = 1; //用户名称
+  string password = 2; //用户密码
+  int64 age = 3; //用户年龄
+  int64 gender = 4; //用户性别
+  string phone = 5; //用户电话
+  string email = 6; //用户邮箱
+  int64 grade = 7; //用户年纪 （大一、大二、大三、大四） 1，2，3，4
+  int64 major = 8; //用户专业信息(关联字段)
+  double star = 9; //用户等级(0~5)
+  string avatar = 10; //用户头像链接
+  string sign = 11; //用户个性签名
+  int64 class = 12; //用户班级
+}
+
+message AddUserResp {
+}
+
+message UpdateUserReq {
+  int64 uID = 1; //数据表自增ID
+  int64 uniqueID = 2; //用户唯一数据ID
+  string name = 3; //用户名称
+  string password = 4; //用户密码
+  int64 age = 5; //用户年龄
+  int64 gender = 6; //用户性别
+  string phone = 7; //用户电话
+  string email = 8; //用户邮箱
+  int64 grade = 9; //用户年纪 （大一、大二、大三、大四） 1，2，3，4
+  int64 major = 10; //用户专业信息(关联字段)
+  double star = 11; //用户等级(0~5)
+  string avatar = 12; //用户头像链接
+  string sign = 13; //用户个性签名
+  int64 class = 14; //用户班级
+}
+
+message UpdateUserResp {
+}
+
+message DelUserReq {
+  int64 ID = 1; //ID
+}
+
+message DelUserResp {
+}
+
+message GetUserByIdReq {
+  int64 ID = 1; //ID
+}
+
+message GetUserByPhoneOrEmailReq {
+  string phone = 1; //用户电话
+  string email = 2; //用户邮箱
+}
+
+message GetUserByIdResp {
+  User user = 1; //user
+}
+
+
+
+
+// ------------------------------------ 
+// Rpc Func
+// ------------------------------------ 
+
+service userrpc{
+
+  //-----------------------用户专业统计表-----------------------
+  rpc AddMajor(AddMajorReq) returns (AddMajorResp);
+  rpc UpdateMajor(UpdateMajorReq) returns (UpdateMajorResp);
+  rpc DelMajor(DelMajorReq) returns (DelMajorResp);
+  rpc GetMajorById(GetMajorByIdReq) returns (GetMajorByIdResp);
+  rpc GetMajorPages(GetMajorPagesReq) returns (GetMajorPagesResp);
+  //-----------------------用户三方关联数据-----------------------
+  rpc AddThird(AddThirdReq) returns (AddThirdResp);
+  rpc UpdateThird(UpdateThirdReq) returns (UpdateThirdResp);
+  rpc DelThird(DelThirdReq) returns (DelThirdResp);
+  rpc GetThirdById(GetThirdByIdReq) returns (GetThirdByIdResp);
+  rpc GetThirdByUserIdAndType(GetThirdByUserIdAndTypeReq) returns (GetThirdByUserIdAndTypeResp);
+  rpc GetThirdBindData(GetThirdBindDataReq) returns (GetThirdBindDataResp);
+  //-----------------------第三方用户数据-----------------------
+  rpc AddThirdData(AddThirdDataReq) returns (AddThirdDataResp);
+  rpc UpdateThirdData(UpdateThirdDataReq) returns (UpdateThirdDataResp);
+  rpc DelThirdData(DelThirdDataReq) returns (DelThirdDataResp);
+  rpc GetThirdDataByThirdId(GetThirdDataByThirdIdReq) returns (GetThirdDataByIdResp);
+  rpc GetThirdDataById(GetThirdDataByIdReq) returns (GetThirdDataByIdResp);
+  //-----------------------用户数据基本信息表-----------------------
+  rpc AddUser(AddUserReq) returns (AddUserResp);
+  rpc UpdateUser(UpdateUserReq) returns (UpdateUserResp);
+  rpc DelUser(DelUserReq) returns (DelUserResp);
+  rpc GetUserById(GetUserByIdReq) returns (GetUserByIdResp);
+  rpc GetUserByPhoneOrEmail(GetUserByPhoneOrEmailReq) returns (GetUserByIdResp);
+
+}

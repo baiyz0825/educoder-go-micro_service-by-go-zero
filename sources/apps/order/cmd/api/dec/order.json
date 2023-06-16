@@ -1,0 +1,240 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "订单中心API",
+    "description": "订单获取、查询、下单接口",
+    "version": "v0.1"
+  },
+  "host": "127.0.0.1:8000",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "trade/v1/order/do": {
+      "post": {
+        "summary": "下单",
+        "operationId": "doOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DoOrderResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DoOrderReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "order"
+        ]
+      }
+    },
+    "trade/v1/order/info": {
+      "get": {
+        "summary": "获取商品信息",
+        "operationId": "getOrderInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/OrderInfoResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "required",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "required",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "order"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "DoOrderReq": {
+      "type": "object",
+      "properties": {
+        "productId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "payPrice": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "payPath": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "DoOrderReq",
+      "required": [
+        "productId",
+        "required",
+        "userId",
+        "payPrice",
+        "payPath"
+      ]
+    },
+    "DoOrderResp": {
+      "type": "object",
+      "properties": {
+        "payPathOrderNum": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "payUrl": {
+          "type": "string"
+        }
+      },
+      "title": "DoOrderResp",
+      "required": [
+        "payPathOrderNum",
+        "status",
+        "payUrl"
+      ]
+    },
+    "OrderInfoReq": {
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "OrderInfoReq",
+      "required": [
+        "uuid",
+        "required",
+        "userId"
+      ]
+    },
+    "OrderInfoResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "uuid": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "product": {
+          "$ref": "#/definitions/ProductBaseInfo"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "payPrice": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "payPath": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createTime": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "statusUpdateTime": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "OrderInfoResp",
+      "required": [
+        "id",
+        "uuid",
+        "product",
+        "status",
+        "userId",
+        "payPrice",
+        "payPath",
+        "createTime",
+        "statusUpdateTime"
+      ]
+    },
+    "ProductBaseInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "productOwnerName": {
+          "type": "string"
+        }
+      },
+      "title": "ProductBaseInfo",
+      "required": [
+        "id",
+        "name",
+        "productOwnerName"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+syntax = "v1"
+
+info(
+	title: "订单中心API"
+	desc: "订单获取、查询、下单接口"
+	author: "baiyz0825"
+	email: "byz0825@outlook.com"
+	version: "v0.1"
+)
+
+import (
+	"data_struct.api"
+)
+
+@server(
+	jwt: Auth
+	group: order
+	prefix : trade/v1
+)
+
+// ===============================================================> 订单 <========================================================================
+service order {
+	@doc "获取订单信息"
+	@handler getOrderInfo
+	get /order/info (OrderInfoReq) returns (OrderInfoResp)
+	
+	@doc "获取用户所有订单数据"
+	@handler getUserAllOrder
+	get /order/all (GetUserAllOrder) returns (GetUserAllOrderResp)
+	
+	@doc "下单"
+	@handler doOrder
+	post /order/do (DoOrderReq) returns (DoOrderResp)
+}
+
+@server (
+	group: aliCallback
+	prefix : trade/v1
+)
+service order{
+	@doc "支付宝回调消息接口"
+	@handler alipayNoticeCallBack
+	post /order/apy/ali/callback
+}

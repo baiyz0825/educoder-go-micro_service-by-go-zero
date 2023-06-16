@@ -1,0 +1,8 @@
+评测pb.orderrpc.DoOrder:
+创建订单成功
+评测pb.orderrpc.GetOrderById:
+订单详情查询成功
+评测pb.orderrpc.DeleteOrderAliAndDb:
+{
+"status":true
+}

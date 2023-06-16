@@ -1,0 +1,117 @@
+syntax = "v1"
+
+info(
+	title: "资源实体信息API"
+	desc: "资源获取修改API接口定义,包括分类、文件资源、文本资源、用户评论"
+	author: "baiyz0825"
+	email: "byz0825@outlook.com"
+	version: "v0.1"
+)
+
+import (
+	"data_struct.api"
+)
+
+@server(
+	jwt: Auth
+	group: classification
+	prefix : res/v1
+)
+// ===============================================================> 分类 <========================================================================
+service resources {
+	@doc "获取全部资源分类"
+	@handler getAllClassifications
+	get /classification/getAll returns (ClassificationTreeMenuResp)
+	
+	@doc "查询某个分类id下的资源信息"
+	@handler getClassificationDataByPages
+	post /classification/subDatas (SearchClassificationSubDataReq) returns (SearchClassificationSubDataResp)
+}
+
+@server(
+	jwt: Auth
+	group: deplete
+	prefix : res/v1
+)
+// ===============================================================> 用户数据统计 <========================================================================
+service resources {
+	@doc "使用用户id查询对应的上传资料以及空间消耗统计信息"
+	@handler getFileAndSpaceInsight
+	get /deplete/data  returns (GetCountUiDResp)
+}
+
+@server(
+	jwt: Auth
+	group: fileRes
+	prefix : res/v1
+)
+// ===============================================================> 文件资源 <========================================================================
+service resources {
+	@doc "用户上传文件资料"
+	@handler uploadFileRes
+	post /file/uopload (UploadFileReq)
+	
+	@doc "删除文件资料"
+	@handler deleteFileRes
+	delete /file/delete (DelFileReq)
+	
+	@doc "文件资料搜索"
+	@handler searchFileRes
+	post /file/search (SearchFileConditionReq) returns (SearchFileConditionResp)
+	
+	@doc "获取文件资源，区分是否允许下载"
+	@handler getFileResData
+	get /file/getData (DownLoadFileReq)
+	
+	@doc "获取文件资源Info"
+	@handler getFileResInfo
+	get /file/getInfo (FileResInfoReq) returns (FileResInfoResp)
+}
+
+@server(
+	jwt: Auth
+	group: textRes
+	prefix : res/v1
+)
+// ===============================================================> 文本资源 <========================================================================
+service resources {
+	@doc "用户上传文本资料"
+	@handler uploadTextRes
+	post /text/upload (UploadTextReq)
+	
+	@doc "删除文本资料,用户id"
+	@handler deleteTextRes
+	delete /text/delete (DelTextReq)
+	
+	@doc "文本资料搜索"
+	@handler searchTextRes
+	post /text/search (SearchOnlineConditionTextReq) returns (SearchOnlineTextConditionResp)
+	
+	@doc "获取详细文本资料"
+	@handler getTextInfo
+	get /text/getInfo (TextResInfoReq) returns (OnlineText)
+}
+
+@server(
+	jwt: Auth
+	group: comment
+	prefix : res/v1
+)
+// ===============================================================> 用户评论信息 <========================================================================
+service resources {
+	@doc "新增用户评论"
+	@handler addUserComment
+	post /comment/add (AddResCommentReq)
+	
+	@doc "删除用户评论"
+	@handler deleteUserComment
+	delete /comment/delete (DelCommentReq)
+	
+	@doc "通过评论id,查询一个评论详情"
+	@handler getCommentDetailById
+	get /comment/oneDetail (GetCommentByIdReq) returns (GetCommentByIdResp)
+	
+	@doc "查询某个资源下评论信息 | 查询用户所有评论 | 查询用户在某一个资源下的所有评论"
+	@handler getCommentsCondition
+	post /comment/resComments (ResCommentByUserOrResIdReq) returns (ResCommentByUserOrResIdResp)
+}
