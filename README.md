@@ -2,6 +2,8 @@
 - [前端仓库](https://github.com/baiyz0825/school-share-buy-frontend) —— 实现部分功能
 - 接口文档：仓库根目录下`deploy/api_doc/头歌Go-zero简单微服务接口.json` 导入ApiPost7中使用。
 ## 项目预览(Project View)
+## 实训地址
+https://www.educoder.net/shixuns/8ayel593/challenges
 ### 实训首页
 ![img.png](assert/project_img1.png)
 ### 任务列表
